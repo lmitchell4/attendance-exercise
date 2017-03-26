@@ -35,7 +35,7 @@ $(function() {
       return localStore.attendance[name];
     },
     countMissingByName: function(name) {
-      var record = this.attendance[name][name];
+      var record = this.attendance[name];
       var count = 0;
       for(var i = 0; i < record.length; i++) {
         if(!record[i]) {
@@ -71,19 +71,19 @@ $(function() {
         var studentName = studentRow.children('.name-col').text();
         var checkBoxes = studentRow.find(':checkbox');
 
-        var newAttendance = {};
-        newAttendance[studentName] = [];
+        var newAttendanceArray = [];
         checkBoxes.each(function() {
-          newAttendance[studentName].push($(this).prop('checked'));
+          newAttendanceArray.push($(this).prop('checked'));
         });
 
         // Save new attendance record.
-        octopus.updateAttendance(studentName,newAttendance);
+        octopus.updateAttendance(studentName,newAttendanceArray);
         
         // Update new counts.
         var numMissed = octopus.getMissing(studentName);
         studentRow.children('.missed-col').text(numMissed);
       });
+      
       this.render();
     },
     render: function() {
@@ -101,7 +101,6 @@ $(function() {
       var allStudentRows = $('tr.student');
       allStudentRows.each(function() {
         var studentName = $(this).children('.name-col').text();
-        console.log(studentName);
         var numMissed = octopus.getMissing(studentName);
         $(this).children('.missed-col').text(numMissed);      
       });
